@@ -18,9 +18,14 @@ public class FileHelper {
     public static void writeData(ArrayList<String> item, Context context){
         //It will create file in devices memory and open it
         try {
+            //Write data into file
+            //It creates file and opens it
+            //Private so other applications cant read it
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             ObjectOutputStream oas = new ObjectOutputStream(fos);
+            //Object writen ito the file
             oas.writeObject(item);
+            //We need to close the file
             oas.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -29,20 +34,23 @@ public class FileHelper {
         }
     }
 
-    //To read file
+    //To read file / reading items
     public static ArrayList<String> readData(Context context){
         ArrayList<String> itemList = null;
         try {
             FileInputStream fis = context.openFileInput(FILENAME);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            //convert to object
+            //convert from object to String
             itemList = (ArrayList<String>) ois.readObject();
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+//needed for very first run of application
+            itemList = new ArrayList<>();
+
+            e.printStackTrace();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
 
         return itemList;
